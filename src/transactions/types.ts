@@ -34,6 +34,11 @@ export type Debit = 0
 export type TransactionType = Credit | Debit
 
 
+export type RequestHandler<T, R> = {
+  validator: (req: unknown) => asserts req is T,
+  handler: (req: T) => Promise<Result<R, Error>>
+}
+
 type UnAuditedTransaction = Omit<Transaction, keyof Audit>;
 type TransactionId = Pick<Transaction, '_id'>
 
@@ -51,8 +56,6 @@ export type ListResult = Omit<UnAuditedTransaction, 'username'>[]
 export type DeleteError = NotModifiedError | NotFoundError
 export type UpdateError = NotModifiedError | NotFoundError
 
-
-// export type HttpResponse<T> = T & { statusCode: number }
 export type CreateHttpResponse = HttpResponse<CreateResult>
 export type UpdateHttpResponse = HttpResponse<UpdateResult>
 export type DeleteHttpResponse = HttpResponse<DeleteResult>

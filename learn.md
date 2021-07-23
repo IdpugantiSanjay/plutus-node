@@ -6,3 +6,5 @@
 The main reason for code design should be to accomodate change and to be flexible
 The change reasons may be to use a new database to use a new web server library
 New Features maybe added this
+
+Each request has a validator, method and database call
