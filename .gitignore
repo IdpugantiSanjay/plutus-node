@@ -1,0 +1,8 @@
+Logs
+node_modules
+.env
+package-lock.json
+yarn.lock
+dist
+.idea
+yarn-error.log
