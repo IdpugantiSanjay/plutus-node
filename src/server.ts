@@ -6,12 +6,12 @@ config()
 import { Client } from '@elastic/elasticsearch'
 import type { Client as NewTypes } from '@elastic/elasticsearch/api/new'
 import { createTransactionIndex } from './transactions/store'
-import { router } from './transactions/routes'
 import { requestLogger } from './internal/request-logger'
 
 
 import expressWinston from 'express-winston'
 import { loggerOptions } from './logger'
+import { transactionRouter } from './transactions'
 
 const app = express()
 app.use(requestLogger)
@@ -23,7 +23,7 @@ const client: NewTypes = new Client({
   node: process.env['ELASTIC_SEARCH_URL'] || 'http://localhost:9200'
 })
 
-app.use('/api/:username/transactions', router)
+app.use('/api/:username/transactions', transactionRouter)
 
 app.get('/', (_, res) => res.send('Working'))
 
