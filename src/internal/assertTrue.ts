@@ -1,5 +1,5 @@
-function assertTrue(condition: boolean): asserts condition {
+export function assert(condition: boolean): asserts condition {
   if (!condition) {
-    throw new Error();
+    throw new Error()
   }
 }

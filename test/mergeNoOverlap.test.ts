@@ -1,9 +1,10 @@
+import { assert } from '../src/internal/assertTrue'
 import mergeNoOverlap from '../src/internal/mergeNoOverlap'
 
 describe('mergeNoOverlap function', () => {
   it('Should merge object if no duplicates / overlaps exist', () => {
     const option = mergeNoOverlap({ name: 'Sanjay' }, { age: 24 }, { location: 'Eluru' })
-    assertTrue(option._tag == 'Some')
+    assert(option._tag == 'Some')
     expect(Object.keys(option.value).length).toBe(3)
   })
 
