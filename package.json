@@ -11,7 +11,7 @@
   "scripts": {
     "prepare": "husky install",
     "build": "tsc && yarn lint",
-    "test": "jest",
+    "test": "yarn build && jest",
     "lint": "eslint ./src --ext .ts --fix",
     "start": "yarn build && node --unhandled-rejections=strict dist/src/server.js",
     "docker-start": "docker-compose down && docker-compose up & sleep 20; yarn start &"
