@@ -1,5 +1,5 @@
-import { UnExpectedError } from "../errors/UnExpectedError";
+import { createUnExpectedError } from '../errors'
 
 export default function throwUnExpectedError(): never {
-  throw new UnExpectedError
+  throw createUnExpectedError('Unexpected Error Occured')
 }

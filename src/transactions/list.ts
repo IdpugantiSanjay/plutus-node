@@ -6,16 +6,18 @@ import { HttpStatusCodes } from '../common/StatusCodes'
 import withStatus from '../internal/withStatus'
 import { store } from './store'
 import { Result } from '@badrap/result'
+import { PlutusError } from '../errors'
 
-export type ListHttpResponse = HttpResponse<ListResult>
-export type ListResult = Omit<UnAuditedTransaction, 'username'>[]
-export type ListArg = Pick<UnAuditedTransaction, 'username' | 'category'> & {
+export type ListFn = (arg: ListArg) => Promise<Result<ListResult, PlutusError>>
+
+type ListHttpResponse = HttpResponse<ListResult>
+type ListResult = Omit<UnAuditedTransaction, 'username'>[]
+type ListArg = Pick<UnAuditedTransaction, 'username' | 'category'> & {
   fromDate: string | Date
   toDate: string | Date
 }
-export type ListFn = (arg: ListArg) => Promise<Result<ListResult>>
 
-async function listTransactions(req: FirstArgument<ListFn>): Promise<Result<ListHttpResponse>> {
+async function listTransactions(req: FirstArgument<ListFn>): Promise<Result<ListHttpResponse, PlutusError>> {
   const result = await store.list(req)
   return withStatus(result, HttpStatusCodes.Success)
 }

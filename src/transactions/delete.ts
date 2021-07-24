@@ -6,14 +6,14 @@ import { HttpStatusCodes } from '../common/StatusCodes'
 import withStatus from '../internal/withStatus'
 import { store } from './store'
 import { Result } from '@badrap/result'
-import { NotModifiedError } from '../errors/NothingToChangeError'
-import { NotFoundError } from '../errors/NotFoundError'
+import { NotFoundError, NotModifiedError, PlutusError } from '../errors'
 
 export type DeleteFn = (arg: DeleteArg) => Promise<Result<DeleteResult, DeleteError>>
-export type DeleteArg = Pick<Transaction, '_id' | 'username'>
-export type DeleteResult = TransactionId
-export type DeleteHttpResponse = HttpResponse<DeleteResult>
-export type DeleteError = NotModifiedError | NotFoundError
+
+type DeleteArg = Pick<Transaction, '_id' | 'username'>
+type DeleteResult = TransactionId
+type DeleteHttpResponse = HttpResponse<DeleteResult>
+type DeleteError = NotModifiedError | NotFoundError
 
 function assertDeleteRequest(req: unknown): asserts req is DeleteArg {
   const shapeObj: ArgPredicates<DeleteArg> = {
@@ -24,7 +24,7 @@ function assertDeleteRequest(req: unknown): asserts req is DeleteArg {
   ow(req, shape)
 }
 
-async function deleteTransaction(req: FirstArgument<DeleteFn>): Promise<Result<DeleteHttpResponse, Error>> {
+async function deleteTransaction(req: FirstArgument<DeleteFn>): Promise<Result<DeleteHttpResponse, PlutusError>> {
   const response = await store.delete(req)
   return withStatus(response, HttpStatusCodes.Success)
 }

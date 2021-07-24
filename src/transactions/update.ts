@@ -6,16 +6,15 @@ import { HttpStatusCodes } from '../common/StatusCodes'
 import withStatus from '../internal/withStatus'
 import { store } from './store'
 import { Result } from '@badrap/result'
-import { NotModifiedError } from '../errors/NothingToChangeError'
-import { NotFoundError } from '../errors/NotFoundError'
+import { NotFoundError, NotModifiedError, PlutusError } from '../errors'
 
 export type UpdateFn = (arg: UpdateArg) => Promise<Result<UpdateResult, UpdateError>>
-export type UpdateArg = UnAuditedTransaction
-export type UpdateResult = TransactionId
-export type UpdateError = NotModifiedError | NotFoundError
-export type UpdateHttpResponse = HttpResponse<UpdateResult>
+type UpdateArg = UnAuditedTransaction
+type UpdateResult = TransactionId
+type UpdateError = NotModifiedError | NotFoundError
+type UpdateHttpResponse = HttpResponse<UpdateResult>
 
-async function updateTransaction(req: FirstArgument<UpdateFn>): Promise<Result<UpdateHttpResponse, Error>> {
+async function updateTransaction(req: FirstArgument<UpdateFn>): Promise<Result<UpdateHttpResponse, PlutusError>> {
   const result = await store.update(req)
   return withStatus(result, HttpStatusCodes.Success)
 }

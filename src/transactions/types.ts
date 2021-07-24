@@ -1,5 +1,6 @@
 import { Audit } from '../common/base.types'
 import { Result } from '@badrap/result'
+import { PlutusError } from '../errors'
 
 export type FirstArgument<T extends (...args: any) => any> = Parameters<T>[0]
 
@@ -19,7 +20,7 @@ export type TransactionType = Credit | Debit
 
 export type RequestHandler<T, R> = {
   validator: (req: unknown) => asserts req is T
-  handler: (req: T) => Promise<Result<R, Error>>
+  handler: (req: T) => Promise<Result<R, PlutusError>>
 }
 
 export type UnAuditedTransaction = Omit<Transaction, keyof Audit>

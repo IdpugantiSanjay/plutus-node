@@ -6,11 +6,13 @@ import { HttpStatusCodes } from '../common/StatusCodes'
 import withStatus from '../internal/withStatus'
 import { store } from './store'
 import { Result } from '@badrap/result'
+import { PlutusError } from '../errors'
 
-export type CreateResult = TransactionId
-export type CreateArg = Omit<UnAuditedTransaction, '_id'>
-export type CreateFn = (arg: CreateArg) => Promise<Result<CreateResult>>
-export type CreateHttpResponse = HttpResponse<CreateResult>
+export type CreateFn = (arg: CreateArg) => Promise<Result<CreateResult, PlutusError>>
+
+type CreateResult = TransactionId
+type CreateArg = Omit<UnAuditedTransaction, '_id'>
+type CreateHttpResponse = HttpResponse<CreateResult>
 
 function assertCreateRequest(req: unknown): asserts req is CreateArg {
   const shapeObj: ArgPredicates<CreateArg> = {
@@ -25,7 +27,7 @@ function assertCreateRequest(req: unknown): asserts req is CreateArg {
   ow(req, shape)
 }
 
-async function createTransaction(req: FirstArgument<CreateFn>): Promise<Result<CreateHttpResponse, Error>> {
+async function createTransaction(req: FirstArgument<CreateFn>): Promise<Result<CreateHttpResponse, PlutusError>> {
   const createResponse = await store.create(req)
   return withStatus(createResponse, HttpStatusCodes.Created)
 }
